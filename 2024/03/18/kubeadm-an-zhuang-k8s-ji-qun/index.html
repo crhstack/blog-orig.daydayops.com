@@ -54,9 +54,9 @@ base">
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 7.1.1"><link rel="alternate" href="/atom.xml" title="天天运维博客" type="application/atom+xml">
-
+<meta name="generator" content="Hexo 7.1.1">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="天天运维博客" type="application/atom+xml">
 <link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
 
 
@@ -387,14 +387,14 @@ base">
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2024-03-18
+                    2024-08-07
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    80
+                    83
                 </div>
                 
 
@@ -428,15 +428,18 @@ base">
 cat << EOF | tee /etc/yum.repos.d/kubernetes.repo
 [kubernetes]
 name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/
+baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
 enabled=1
 gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/v1.29/rpm/repodata/repomd.xml.key
-exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
+repo_gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg https://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg
 EOF
 
 # 安装工具
 yum install -y kubeadm kubelet kubectl --enablerepo=kubernetes
+</code></pre>
+<h2 id="containerd安装"><a href="#containerd安装" class="headerlink" title="containerd安装"></a>containerd安装</h2><pre class=" language-shell"><code class="language-shell">wget -O /etc/yum.repos.d/docker-ce.repo https://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum install containerd.io
 </code></pre>
 <pre class=" language-shell"><code class="language-shell"># cni指定
 cat << EOF | tee /etc/cni/net.d/10-containerd-net.conflist
@@ -513,7 +516,7 @@ kubeadm join 10.100.60.28:6443 --token 8upfhx.vl9d3m5myie3t89m \
 
 kubectl proxy --port=8080 &
 </code></pre>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="1-提示CNI异常？"><a href="#1-提示CNI异常？" class="headerlink" title="1. 提示CNI异常？"></a>1. 提示CNI异常？</h3><pre class=" language-shell"><code class="language-shell">kubeadm init
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><h3 id="1-提示CRI异常？"><a href="#1-提示CRI异常？" class="headerlink" title="1. 提示CRI异常？"></a>1. 提示CRI异常？</h3><pre class=" language-shell"><code class="language-shell">kubeadm init
 [init] Using Kubernetes version: v1.29.3
 [preflight] Running pre-flight checks
 error execution phase preflight: [preflight] Some fatal errors occurred:
